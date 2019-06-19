@@ -1,0 +1,121 @@
+<html>
+    <head>
+	<script>
+
+	 
+	 function clamp(x,min, max){
+	     return Math.max(min, Math.min(x, max))
+	 }
+	 
+	 function rgbToYCbCr(r, g, b) {
+	     //r /= 255, g /= 255, b /= 255;
+
+
+	     y = clamp(0.299    * r + 0.587    * g + 0.114    * b, 0, 255);
+	     cb = clamp(-0.14713 * r + -0.28886 * g + 0.436    * b + 128, 0, 255);
+	     cr = clamp(0.615    * r + -0.51499 * g + -0.10001 * b + 128, 0, 255);
+	     
+	     return [ y, cb, cr];
+	 }
+	 
+	 function yCbCrToRgb(y, cb, cr) {
+
+	     r = clamp(1 * y +        0 * (cb - 128) + 1.13983 * (cr - 128), 0, 255);
+	     g = clamp(1 * y + -0.39465 * (cb - 128) + -0.5806 * (cr - 128), 0, 255);
+	     b = clamp(1 * y + 2.03211 * (cb - 128) +       0 * (cr - 128), 0, 255);
+	     
+	     return [ Math.floor(r), Math.floor(g), Math.floor(b) ];
+	 }
+	 
+	 function quant(YCbCr){
+	     var quanted = [Math.ceil(YCbCr[0]*50/256),
+			    Math.ceil(YCbCr[1]*50/256),
+			    Math.ceil(YCbCr[2]*50/256)]
+	     return quanted
+	 }
+	 
+	 function unquant(YCbCr){
+	     
+	     //console.log('unquant-inside', YCbCr[1]/256)
+	     var unquanted = [YCbCr[0]*256/50,
+			      YCbCr[1]*256/50,
+			      YCbCr[2]*256/50]
+	     return unquanted
+	 }window.onload = function() {
+	     document.getElementById('button').onclick = process
+	     
+	 }
+
+	 function process(){
+	     var canvas = document.getElementById('canvas');
+	     var ctx = canvas.getContext('2d')
+	     
+	     var data = document.getElementById('ta').value
+
+	     var wh = data.match(/^(\d+),(\d+),/g)
+	     var ll = wh[0].length
+	     wh = wh[0].match(/(\d{1,})/g)
+	     
+	     var width = parseInt(wh[0], 10)
+	     var height = parseInt(wh[1], 10)
+	     
+	     console.log(width, height)
+	     
+	     data = data.slice(ll)
+	     //console.log("data:", data.slice(0,10))
+	     
+	     var regexp = /(\d{1,2},?){3}/g
+
+	     var h = data.match(regexp);
+	     //console.log(h)
+
+	     var q = []
+	     for(var i = 0; i < h.length; i++){
+		 var nr = /\d{1,2}/g
+		 var hh = h[i].match(nr);
+
+		 q.push([parseInt(hh[0],10), parseInt(hh[1],10), parseInt(hh[2],10)])
+	     }
+
+	     var imgData = ctx.getImageData(0, 0, width, height)
+	     
+	     var u = q.map(function(x){
+		 return unquant(x)
+	     })
+
+	     var rgb = u.map(function(x){
+		 var rgb =  yCbCrToRgb(x[0], x[1], x[2])
+		 return rgb
+	     })
+
+	     console.log(q.slice(0,4))
+
+	     for (var i = 0, j = 0; i < imgData.data.length; i+=4){
+
+		 
+		 imgData.data[i] =   rgb[j][0]
+		 imgData.data[i+1] = rgb[j][1]
+		 imgData.data[i+2] = rgb[j][2]
+		 imgData.data[i+3] = 255
+		 j++
+	     }
+
+	     ctx.putImageData(imgData, 0, 0)
+
+	 }
+	</script>
+    </head>
+
+
+    <body>
+	<canvas id="canvas" width="800" height="500">
+	    
+	</canvas>
+
+	<br>
+	<br>
+	<button style="display:block" id="button">Load</button>
+	<textarea style="display:block" rows="100" cols="100" id="ta"></textarea>
+	
+    </body>
+</html>

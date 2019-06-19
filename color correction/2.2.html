@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <script src="script.js" type="text/javascript" charset="utf-8" async defer></script>
+    <style>
+        * {font-family: Arial;}
+        label { padding-right: 50px;}
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="525" height="350">  
+	</canvas>
+    <div style="display:none">
+        <img src="image.png" id="img">
+    </div>
+    <br>
+    <div style="display:inline-block;margin-right: 50px;">
+        <h2>RGB</h2>
+        <label for="offset" style="font-size:10px">Offset</label>
+        <div>
+            <input type="range" min="-100" max="100" value="0" class="slider" id="offset" name="offset">
+        </div>
+        <label for="gain" style="font-size:10px">Gamma</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="gamma" name="gamma">
+        </div>
+        <label for="gain" style="font-size:10px">Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="gain" name="gain">
+        </div>
+        <label for="rgain" style="font-size:10px">Red Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="rgain" name="rgain">
+        </div>
+        <label for="ggain" style="font-size:10px">Green Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="ggain" name="ggain">
+        </div>
+        <label for="bgain" style="font-size:10px">Blue Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="bgain" name="bgain">
+        </div>
+        <button type="button" id="result">Click Me!</button>
+    </div>
+    <div style="display:inline-block;vertical-align: top;">
+        <h2>HSV</h2>
+        <label for="hgain" style="font-size:10px">Hue Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="hgain" name="hgain">
+        </div>
+        <label for="sgain" style="font-size:10px">Saturation Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="sgain" name="sgain">
+        </div>
+        <label for="vgain" style="font-size:10px">Value Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="vgain" name="vgain">
+        </div>
+        <label for="hsvgain" style="font-size:10px">HSV Gain</label>
+        <div>
+            <input type="range" min="0" max="200" value="100" class="slider" id="hsvgain" name="hsvgain">
+        </div>
+    </div>
+</body>
+
+</html>
